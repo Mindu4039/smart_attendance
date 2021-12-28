@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>I'm Here</title>
+</head>
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Bevan&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../static/css/signup.css" th:href="@{/css/signup.css}">
+
+
+<body>
+<form role="form" th:action="@{/signup}" th:object="${accountDto}" method="post" name="signupForm">
+  <div class="frame">
+
+    <div class="logo">
+      <h2><a href="index.html" th:href="@{/}">I'm Here</a></h2>
+    </div>
+
+
+
+      <p>회원정보를 입력해주세요</p>
+
+      <label th:for="username">
+        <input type="text" th:field="*{username}" placeholder="아이디" required>
+      </label>
+
+      <label th:for="password">
+        <input id="pw" type="password" onchange="test()" th:field="*{password}" placeholder="비밀번호" required>
+      </label>
+
+      <label th:for="confirmPassword">
+        <input id="pwCheck" type="password" th:field="*{confirmPassword}" placeholder="비밀번호 확인" onchange="test()" required>
+        <div id="alert"></div>
+      </label>
+
+      <label th:for="name">
+        <input  type="text" th:field="*{name}" placeholder="이름" required>
+      </label>
+
+      <label th:for="email">
+        <input  type="email" th:field="*{email}" placeholder="이메일"  required>
+      </label>
+
+      <input id="signupBtn" value="회원가입" type ="submit" onsubmit="errorCheck()">
+  </div>
+
+  <div id="modalWrap" th:if="${#fields.hasErrors()}" style="display: flex;">
+    <a href="#" th:href="@{/signup}" id="modalClose" onclick="offclick()">닫기</a>
+
+
+    <div id="errorMes">
+      <p id="idError" th:if="${#fields.hasErrors('username')}" style="display:block">이미 존재하는 아이디입니다 ❗❗</p>
+
+      <p id="pwError" th:if="${#fields.hasErrors('password')}">비밀번호가 일치하지 않습니다 ❗❗</p>
+    </div>
+  </div>
+  <div id="bg_black" th:if="${#fields.hasErrors()}"></div>
+
+</form>
+
+<script>
+
+  function test() {
+    var p1 = document.getElementById('pw');
+    var p2 = document.getElementById('pwCheck');
+    var message= document.getElementById('alert');
+    
+    if (p1.value != p2.value) 
+    {
+      message.innerHTML='비밀번호가 일치하지 않습니다';
+      message.style.color='red';
+      message.style.paddingBottom = '5.582px';
+      p2.style.marginBottom='0';
+      return false;
+    }
+
+    else 
+    {
+      message.innerHTML='비밀번호가 일치합니다';
+      message.style.color='blue';
+      message.style.paddingBottom = '5.582px';
+      p2.style.marginBottom='0';
+        return true;
+    }
+};
+
+
+
+function errorCheck() {
+  var p1 = document.getElementById('pw');
+  var p2 = document.getElementById('pwCheck');
+  var pwError = document.querySelector('#pwError');
+var idError = document.querySelector('#idError');
+  if (p1.value != p2.value) 
+  {
+    modal.style.display='flex';
+    bg.style.display='block';
+    pwError.style.display='block';
+  }
+}
+
+function offclick() {
+var modal=document.querySelector('#modalWrap');
+var bg=document.querySelector('#bg_black');
+var pwError = document.querySelector('#pwError');
+var idError = document.querySelector('#idError');
+  
+modal.style.display='none';
+bg.style.display='none';
+pwError.style.display='none';
+idError.style.display='none';
+}
+  </script>
+
+</body>
+</html>

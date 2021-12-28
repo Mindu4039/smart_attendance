@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I'm Here</title>
+</head>
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Bevan&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../static/css/check.css" th:href="@{/css/check.css}">
+
+<body>
+
+<header>
+  <div class="logo">
+    <h2><a href="../html/attendance.html" th:href="@{/user/attendance}">I'm Here</a></h2>
+  </div>
+  <nav>
+    <ul>
+      <li> <a href="class_selection.html" th:href="@{/user/courses}">수업관리</a></li>
+      <li> <a href="date.html" th:href="@{/user/course/{id}/dates/{page}/{size} (id=${courseId}, page=0, size=20)}">출석관리</a></li>
+      <li> <a href="members.html" th:href="@{/user/course/{id}/members/{page}/{size} (id=${courseId}, page=0, size=20)}">멤버관리</a></li>
+    </ul>
+    <div><a href="index.html" id="logout" th:href="@{/logout}">로그아웃</a></div>
+  </nav>
+</header>
+
+<form id="frm" method="post" th:object="${attendCheckDto}" th:action="@{/user/course/{cId}/date/{dId}/checks/{page}/{size} (cId=${courseId},dId=${dateId}, page=0, size=20)}">
+
+<h3>출석한 학생들</h3>
+  <div class="container">
+    <table class="members">
+      <tr id="th">
+        <th>번호</th>
+        <th>이름</th>
+        <th>나이</th>
+        <th>출결 현황</th>
+      </tr>
+      <tbody>
+        <tr th:each="check, stat : *{attendChecks}" th:if="${check.attendCheck.toString()} != '결석'">
+          <td th:text="${check.member.number}"></td>
+          <td th:text="${check.member.name}"></td>
+          <td th:text="${check.member.age}"></td>
+          <td id="status" th:text="${check.attendCheck}"></td>
+          <td id="statusList">
+            <select th:field="*{attendChecks[__${stat.index}__].attendCheck}" th:value="${check.attendCheck}">
+              <option value="" th:value="${status[0]}">출석</option>
+              <option value="" th:value="${status[1]}">지각</option>
+              <option value="" th:value="${status[2]}">결석</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<h3>결석한 학생들</h3>
+  <div class="container">
+    <table class="members">
+      <tr id="th">
+        <th>번호</th>
+        <th>이름</th>
+        <th>나이</th>
+        <th>출결 현황</th>
+      </tr>
+      <tbody>
+        <tr th:each="check2, stat : *{attendChecks}" th:if="${check2.attendCheck.toString()} == '결석'">
+          <td th:text="${check2.member.number}"></td>
+          <td th:text="${check2.member.name}"></td>
+          <td th:text="${check2.member.age}"></td>
+          <td id="status" th:text="${check2.attendCheck}"></td>
+          <td id="statusList">
+            <select th:field="*{attendChecks[__${stat.index}__].attendCheck}" th:value="${check2.attendCheck}">
+              <option value="" th:value="${status[0]}">출석</option>
+              <option value="" th:value="${status[1]}">지각</option>
+              <option value="" th:value="${status[2]}">결석</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<input type="button" class="btn" id="change" onclick="changeStatus();" value="수정">
+<input type="button" class="btn" id="done" onclick="changeDone();" value="완료">
+</form>
+<script>
+  const table = document.querySelector('.members');
+  table.addEventListener('DomSubtreeModified',check());
+
+  function check() {
+  var status=document.querySelectorAll("#status");
+  for(i=0;i<status.length;i++)
+  {
+    var tr=status[i].parentNode;
+  if(status[i].innerHTML=='출석')
+  {
+tr.style.backgroundColor='#b8e994';
+}
+  else if(status[i].innerHTML=='결석')
+  {
+  tr.style.backgroundColor='#e66767';
+  }
+  else if(status[i].innerHTML=='지각')
+  {
+    tr.style.backgroundColor='#f7d794';
+    }
+  }
+}
+
+function changeStatus() {
+  var status = document.querySelectorAll('#status');
+  var statusList = document.querySelectorAll('#statusList');
+  var changeBtn = document.querySelector('#change')
+  var doneBtn = document.querySelector('#done')
+  changeBtn.style.display='none';
+  doneBtn.style.display='block';
+  
+  for(i=0;i<status.length;i++)
+  {
+  status[i].style.display='none';
+  statusList[i].style.display='block';
+  }
+  }
+  
+  function changeDone() {
+    var status = document.querySelectorAll('#status');
+    var statusList = document.querySelectorAll('#statusList');
+    var changeBtn = document.querySelector('#change')
+    var doneBtn = document.querySelector('#done')
+    changeBtn.style.display='block';
+    doneBtn.style.display='none';
+    
+    for(i=0;i<status.length;i++)
+    {
+    status[i].style.display='block';
+    statusList[i].style.display='none';
+    }
+    document.getElementById('frm').submit();
+}
+
+
+</script>
+</body>
+</html>

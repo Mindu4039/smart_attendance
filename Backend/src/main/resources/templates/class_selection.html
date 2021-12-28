@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I'm Here</title>
+</head>
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Bevan&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../static/css/class_selection.css" th:href="@{/css/class_selection.css}">
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2><a href="attendance.html" th:href="@{/user/attendance}">I'm Here</a></h2>
+    </div>
+    <nav class="menu">
+      <ul>
+      </ul>
+      <div><a href="index.html" id="logout" th:href="@{/logout}">로그아웃</a></div>
+    </nav>
+  </header>
+
+
+  <div class="container">
+      <h3>수업 목록</h3>
+
+      <div class="classList">
+        <ul class="classContainer" >
+          <li th:each="course : ${courses}">
+              <a href="#" th:href="@{/user/course/{id}/dates/{page}/{size} (id=${course.getId()}, page=0, size=20)}" class="class" th:text="${course.getCourseName()}"></a>
+              <a id="delete" onclick="deleteClass()" th:href="@{/user/course/{id}/delete (id=${course.id})}"> ⛔</a>
+          </li>
+        </ul>
+        
+  <div class="btnContainer">
+
+      <div class="btns">
+        <input type="button" class="btn" id="add" onclick="createClass()" value="추가">
+        <input type="button" class="btn" id="change" onclick="change()" value="삭제">
+        <input type="button" class="btn" id="done" onclick= "changeDone()" value="완료">
+        </div>
+
+  </div>
+</div>
+</div>
+
+      <!-- 추가 버튼을 눌렀을 경우 모달창 -->
+      <!-- ----------전 버전------------- -->
+      <!-- <div class= "modalWrap" id="modalInsert">
+        <a href="#" id="modalClose" onclick="offclick()">닫기</a>
+        <div id="classInsert">
+          <form method="post" th:action="@{/user/courses}" th:object="${addCourseDto}">
+            <label th:for="coursename">
+                <input style="display:block; height:25.98px" placeholder="수업명을 입력해주세요." th:field="${addCourseDto.courseName}">
+            </label>
+            <input type="submit" value="입력" id="insert">
+          </form>
+        </div>
+      </div> -->
+  <form id="frm" method="post" th:action="@{/user/courses}" th:object="${addCourseDto}">
+      <div class= "modalWrap" id="modalInsert">
+        <div id="classInsert">
+            <div>
+              <label for="className">수업명 : </label>
+            <input name="className" placeholder="수업명을 입력해주세요." style="width: 150px; margin-left:15px;" th:field="${addCourseDto.courseName}" required>
+          </div>
+            <div>
+            <label for="startTime">시작시간 : </label>
+            <input type="time" id="appt" name="startTime" th:field="${addCourseDto.startTime}" required >
+          </div>
+          <div>
+            <label for="endTime">종료시간 : </label>
+            <input type="time" id="appt" name="endTime" th:field="${addCourseDto.endTime}" required >
+          </div>
+      </div>
+      <div id="modalClose"> 
+          <a onclick="submitoff()">입력</a>
+          <a onclick="offclick()">닫기</a>
+      </div>
+    </div>
+  </form>
+
+    <!-- --------- 전 버전 ------------- -->
+      <!-- <div class= "modalWrap" id="modalConfirm" >
+        <div>삭제하시겠습니까 ?</div>
+        <div id="confirmSend">
+        <form action="#"  method="get" th:action="@{/user/course/{cId}/delete/reset(cId=${courseId})}">
+            <input type="submit" class="confirmBtns" id="confirm" value="확인">
+        </form>
+        <form action="#" method="get" th:action="@{/user/courses}">
+            <input type="submit" class="confirmBtns" value="취소" id="cancel" onclick="offclick()">
+        </form>
+      </div>
+      </div> -->
+    
+      <div class= "modalWrap" id="modalConfirm">
+        <div style="font-size: 1.1em;">삭제하시겠습니까 ?</div>
+        <form action="#" >
+          <div id="modalClose">
+        <a href="#" th:href="@{/user/course/{cId}/delete/reset(cId=${courseId})}" onclick="confirmed()">확인</a>
+        <a href="#" th:href="@{/user/courses}" onclick="offclick()">취소</a>
+      </div>
+        </form>
+      </div>
+      
+      <div id="bg_black"></div>
+      
+      <script>
+        function createClass() //수업 추가
+        { 
+          var modal=document.querySelector('#modalInsert');
+          var bg=document.querySelector('#bg_black');
+          modal.style.display='flex';
+          bg.style.display='block';
+        }
+    
+        function deleteClass() //수업 삭제
+        {
+          var modal=document.querySelector('#modalConfirm');
+          var bg=document.querySelector('#bg_black');
+          modal.style.display='flex';
+          bg.style.display='block';
+        }
+    
+        function change() //변경 버튼을 눌렀을 때 
+        {
+          var deleteBtn=document.querySelectorAll('#delete');
+          var addBtn=document.querySelector('#add');
+          var changeBtn=document.querySelector('#change');
+          var doneBtn=document.querySelector('#done');
+          var classes=document.querySelectorAll('.class')
+    
+          for(var i=0; i<deleteBtn.length;i++){
+            deleteBtn[i].style.display='block';
+            classes[i].style.pointerEvents = 'none';
+          }
+          addBtn.style.display='none';
+          changeBtn.style.display='none';
+          doneBtn.style.display='block';
+        }
+    
+    
+        function changeDone()
+        {
+          var deleteBtn=document.querySelectorAll('#delete');
+          var addBtn=document.querySelector('#add');
+          var addBtn=document.querySelector('#add');
+          var changeBtn=document.querySelector('#change');
+          var doneBtn=document.querySelector('#done');
+          
+          for(var i=0; i<deleteBtn.length;i++){
+            deleteBtn[i].style.display='none';
+          }
+          addBtn.style.display='block';
+          changeBtn.style.display='block';
+          doneBtn.style.display='none';
+        }
+        
+    
+        function offclick() {
+          var modalInsert=document.querySelector('#modalInsert');
+          var modalConfirm=document.querySelector('#modalConfirm');
+          var bg=document.querySelector('#bg_black');
+          modalInsert.style.display='none';
+          modalConfirm.style.display='none';
+          bg.style.display='none';
+          }
+
+        function submitoff() {
+            var modalInsert=document.querySelector('#modalInsert');
+            var modalConfirm=document.querySelector('#modalConfirm');
+            var bg=document.querySelector('#bg_black');
+            modalInsert.style.display='none';
+            modalConfirm.style.display='none';
+            bg.style.display='none';
+            document.getElementById('frm').submit();
+        }
+    
+          function confirmed() {
+            var modalConfirm=document.querySelector('#modalConfirm');
+            var bg=document.querySelector('#bg_black');
+            document.querySelector('#confirmSend').submit();
+            modalConfirm.style.display='none';
+            bg.style.display='none';
+            }
+      </script>
+  <script th:if="${courseId != 0}">change(); deleteClass();</script>
+
+    </body>
+    </html>
