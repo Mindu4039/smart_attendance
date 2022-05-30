@@ -28,10 +28,10 @@ public class Course implements Comparable<Course>{
     private Account account;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> members = new ArrayList<>();
+    private List<Member> members;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AttendDate> attendDates = new ArrayList<>();
+    private List<AttendDate> attendDates;
 
     public void setAccount(Account account){
         this.account = account;

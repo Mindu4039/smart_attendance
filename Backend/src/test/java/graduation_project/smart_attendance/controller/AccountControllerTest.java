@@ -1,30 +1,27 @@
 package graduation_project.smart_attendance.controller;
 
 import graduation_project.smart_attendance.config.CustomAuthenticationFailureHandler;
+import graduation_project.smart_attendance.domain.Account;
 import graduation_project.smart_attendance.repository.AccountRepository;
 import graduation_project.smart_attendance.service.AccountService;
-import graduation_project.smart_attendance.service.AccountValidator;
-import lombok.extern.slf4j.Slf4j;
+import graduation_project.smart_attendance.validator.AccountValidator;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AccountController.class)
 @ContextConfiguration
 @WithAnonymousUser
-@Slf4j
 class AccountControllerTest {
 
     @Autowired
@@ -55,8 +52,13 @@ class AccountControllerTest {
 
     @Test
     void createUser() throws Exception {
+        Long accountId = 1L;
+        given(accountService.createAccount(any(Account.class))).willReturn(accountId);
 
-        mvc.perform(post("/signup"))
+        mvc.perform(post("/signup")
+                        .param("username", "testId")
+                        .param("password", "testPw")
+                        .param("confirmPassword", "testPw"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
                 .andDo(print());

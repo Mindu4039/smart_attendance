@@ -8,7 +8,7 @@ import graduation_project.smart_attendance.repository.MemberRepository;
 import graduation_project.smart_attendance.service.AccountService;
 import graduation_project.smart_attendance.service.CourseService;
 import graduation_project.smart_attendance.service.MemberService;
-import graduation_project.smart_attendance.service.MemberValidator;
+import graduation_project.smart_attendance.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

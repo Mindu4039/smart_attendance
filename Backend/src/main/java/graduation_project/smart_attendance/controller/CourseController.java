@@ -5,7 +5,7 @@ import graduation_project.smart_attendance.domain.Course;
 import graduation_project.smart_attendance.dto.AddCourseDto;
 import graduation_project.smart_attendance.service.AccountService;
 import graduation_project.smart_attendance.service.CourseService;
-import graduation_project.smart_attendance.service.CourseValidator;
+import graduation_project.smart_attendance.validator.CourseValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,6 @@ public class CourseController {
 
     @PostMapping("/user/courses")
     public String addCourse(@Valid AddCourseDto addCourseDto, BindingResult bindingResult){
-        System.out.println(addCourseDto.getStartTime());
         Account account = accountService.currentAccount();
         addCourseDto.setAccount(account);
         courseValidator.validate(addCourseDto, bindingResult);

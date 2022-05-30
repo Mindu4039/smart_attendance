@@ -1,4 +1,4 @@
-package graduation_project.smart_attendance.service;
+package graduation_project.smart_attendance.validator;
 
 import graduation_project.smart_attendance.domain.Member;
 import graduation_project.smart_attendance.dto.AccountDto;
