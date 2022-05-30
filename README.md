@@ -2,5 +2,5 @@
 
 ## 기술 스택
 - Front-End: HTML, CSS
-- Back_End: Java, Spring, JPA, Thymeleaf, MySQL, H2(Local)
+- Back_End: Java, Spring, Spring Security, JPA, Thymeleaf, MySQL, H2(Local)
 - Client_App: Python, OpenCV
