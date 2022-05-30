@@ -26,7 +26,7 @@ public class AttendDate implements Comparable<AttendDate>{
     private Course course;
 
     @OneToMany(mappedBy = "attendDate", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AttendCheck> attendChecks = new ArrayList<>();
+    private List<AttendCheck> attendChecks;
 
     public void setCourse(Course course) {
         this.course = course;

@@ -35,7 +35,7 @@ public class Member implements Comparable<Member>{
     private Course course;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AttendCheck> attendChecks = new ArrayList<>();
+    private List<AttendCheck> attendChecks;
 
     public void setCourse(Course course) {
         this.course = course;

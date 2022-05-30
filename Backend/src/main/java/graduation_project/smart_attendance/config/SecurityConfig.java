@@ -44,7 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/user/**").hasRole("USER")
                 .anyRequest().permitAll()
                 .and()
@@ -54,6 +56,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/user/courses")
                 .failureHandler(customFailureHandler)
                 .permitAll();
-        http.csrf().disable();
     }
 }

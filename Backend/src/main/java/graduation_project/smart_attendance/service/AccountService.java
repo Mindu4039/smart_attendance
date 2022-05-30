@@ -51,10 +51,9 @@ public class AccountService {
 
     public Account currentAccount(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         User user = (User) authentication.getPrincipal();
-
 
         return accountRepository.findByUsername(user.getUsername());
     }
+
 }

@@ -1,4 +1,4 @@
-package graduation_project.smart_attendance.service;
+package graduation_project.smart_attendance.validator;
 
 import graduation_project.smart_attendance.dto.AccountDto;
 import graduation_project.smart_attendance.repository.AccountRepository;
@@ -21,6 +21,7 @@ public class AccountValidator implements Validator {
     @Override
     public void validate(Object obj, Errors errors) {
         AccountDto accountDto = (AccountDto) obj;
+
         if(!accountDto.getPassword().equals(accountDto.getConfirmPassword())){
             errors.rejectValue("password", "key");
         } else if(accountRepository.findByUsername(accountDto.getUsername()) != null){

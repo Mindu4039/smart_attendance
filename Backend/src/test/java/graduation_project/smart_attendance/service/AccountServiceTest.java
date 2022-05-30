@@ -28,8 +28,6 @@ class AccountServiceTest {
     @InjectMocks
     private AccountService accountService;
 
-
-
     @BeforeEach
     void beforeEach() {
         Account account = AccountDto.builder()

@@ -2,7 +2,7 @@ package graduation_project.smart_attendance.controller;
 
 import graduation_project.smart_attendance.dto.AccountDto;
 import graduation_project.smart_attendance.service.AccountService;
-import graduation_project.smart_attendance.service.AccountValidator;
+import graduation_project.smart_attendance.validator.AccountValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,6 +24,7 @@ public class AccountController {
     @GetMapping("/signup")
     public String createAccountForm(Model model){
         model.addAttribute("accountDto", new AccountDto());
+
         return "signup";
     }
 
